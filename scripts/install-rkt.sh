@@ -51,11 +51,11 @@ fi
 # disable selinux
 if ! grep -q permissive /etc/selinux/config; then
     echo disabling selinux
-    sed -i'' 's/enforcing/permissive/' /etc/selinux/config
+    sed -i'' 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+    setenforce Permissive # so we don't have to reboot
 else
     echo selinux is already disabled
 fi
-setenforce Permissive # so we don't have to reboot
 
 # install tmpfiles.d
 if [ ! -f /usr/lib/tmpfiles.d/rkt.conf ]; then
@@ -77,7 +77,7 @@ for svc in $(find init/systemd -maxdepth 1 -type f); do
 done
 
 # install stage1 ACIs
-if [ ! -d /usr/local/lib/rkt/stage1-images ]; then
+if [ ! -d /usr/lib/rkt/stage1-images ]; then
     echo installing stage1 ACIs
     mkdir -p /usr/lib/rkt/stage1-images
 else
