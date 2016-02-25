@@ -32,6 +32,14 @@ else
     echo rkt group already exists
 fi
 
+# add vagrant user to the rkt group
+if ! groups vagrant | grep -q rkt; then
+    echo adding vagrant to the rkt group
+    gpasswd -a vagrant rkt
+else
+    echo already added vagrant to the rkt group
+fi
+
 # create rkt data dir
 if [ ! -d $DATA_DIR ]; then
     echo setting up $DATA_DIR
